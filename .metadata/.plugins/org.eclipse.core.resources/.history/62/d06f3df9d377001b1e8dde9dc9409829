@@ -1,0 +1,92 @@
+package apresentacao;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
+public class Principal {
+	private static char[] tabelaSubstituicao = new char[26];
+	
+	public static void main(String[] args) {
+		//Estabelecimento das substituições
+		tabelaSubstituicao[1] = 'a';
+		tabelaSubstituicao[2] = 'b';
+		tabelaSubstituicao[3] = 'c';
+		tabelaSubstituicao[4] = 'd';
+		tabelaSubstituicao[5] = 'e';
+		tabelaSubstituicao[6] = 'f';
+		tabelaSubstituicao[7] = 'g';
+		tabelaSubstituicao[8] = 'h';
+		tabelaSubstituicao[9] = 'i';
+		tabelaSubstituicao[10] = 'j';
+		tabelaSubstituicao[11] = 'k';
+		tabelaSubstituicao[12] = 'l';
+		tabelaSubstituicao[13] = 'm';
+		tabelaSubstituicao[14] = 'n';
+		tabelaSubstituicao[15] = 'o';
+		tabelaSubstituicao[16] = 'p';
+		tabelaSubstituicao[17] = 'q';
+		tabelaSubstituicao[18] = 'r';
+		tabelaSubstituicao[19] = 's';
+		tabelaSubstituicao[20] = 't';
+		tabelaSubstituicao[21] = 'u';
+		tabelaSubstituicao[22] = 'v';
+		tabelaSubstituicao[23] = 'x';
+		tabelaSubstituicao[24] = 'y';
+		tabelaSubstituicao[25] = 'z';
+		
+		// Declaração das variaveis
+		BufferedReader leitor = new BufferedReader(new InputStreamReader(System.in));
+		
+		String entrada = "";
+		String criptograma = "";
+		
+		try {
+			//Entrada de dados
+			System.out.print("Digite um texto: ");
+			entrada = leitor.readLine();
+			
+			//Cifra
+			criptograma = cifrarRot13(entrada);
+			
+			//Saida de dados
+			System.out.println("Criptograma: " + criptograma);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	private static String cifrarRot13(String entrada) {
+		String retorno = "";
+		
+		for (int i = 0 ; i < entrada.length() ; i++) {
+			int posicao = descobrirPosicaoCaractere(entrada.substring(i, i + 1));
+			
+			if (posicao == -1) {
+				retorno += entrada.substring(i, i + 1);
+			} else {
+				posicao += (tabelaSubstituicao.length / 2);
+				if (posicao > (tabelaSubstituicao.length - 1)) {
+					posicao -= tabelaSubstituicao.length;
+				}
+				
+				retorno += tabelaSubstituicao[posicao];
+			}
+		}
+		
+		return retorno;
+	}
+	
+	private static int descobrirPosicaoCaractere(String caractere) {
+		int retorno = -1;
+		
+		for (int i = 0 ; i < tabelaSubstituicao.length ; i++) {
+			if (tabelaSubstituicao[i] == caractere.toCharArray()[0]) {
+				retorno = i;
+				break;
+			}
+		}
+		
+		return retorno;
+	}
+}
