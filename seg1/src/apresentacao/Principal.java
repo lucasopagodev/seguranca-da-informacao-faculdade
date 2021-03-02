@@ -8,7 +8,7 @@ public class Principal {
 private static char[] tabelaSubstituicao = new char[28];
 	
 	public static void main(String[] args) {
-		// Estabelecimento das substituições
+		//Estabelecimento das substituições
 		tabelaSubstituicao[0] = 'a';
 		tabelaSubstituicao[1] = 'b';
 		tabelaSubstituicao[2] = 'c';
@@ -38,21 +38,21 @@ private static char[] tabelaSubstituicao = new char[28];
 		tabelaSubstituicao[26] = ' ';
 		tabelaSubstituicao[27] = 'A';
 		
-		// Declaração de variáveis
+		//Declaração de variáveis
 		BufferedReader leitor = new BufferedReader(new InputStreamReader(System.in));
 		
 		String entrada = "";
 		String criptograma = "";
 		
 		try {
-			// Entrada de dados
+			//Entrada de dados
 			System.out.print("Digite um texto: ");
 			entrada = leitor.readLine();
 			
-			// Cifra
+			//Cifra
 			criptograma = cifrarRot13(entrada);
 			
-			// Saída de dados
+			//Saída de dados
 			System.out.println("Criptograma: " + criptograma);
 		} catch (Exception erro) {
 			System.out.println(erro);
@@ -72,11 +72,9 @@ private static char[] tabelaSubstituicao = new char[28];
 				if (posicao > (tabelaSubstituicao.length - 1)) {
 					posicao -= tabelaSubstituicao.length;
 				}
-				
 				retorno += tabelaSubstituicao[posicao];
 			}
 		}
-		
 		return retorno;
 	}
 	
@@ -89,7 +87,6 @@ private static char[] tabelaSubstituicao = new char[28];
 				break;
 			}
 		}
-		
 		return retorno;
 	}
 }
