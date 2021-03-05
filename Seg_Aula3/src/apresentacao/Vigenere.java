@@ -78,8 +78,7 @@ public class Vigenere {
 // posições do texto = 0123456789...
 // posições da senha = 0 1 2 3 0 1
 			String hexaDecimal = texto.substring(i, i + 2);
-			char caractereResultadoDoXOR = (char) (Integer.parseInt(hexaDecimal, 16) ^
-												   senha.toCharArray()[contadorSenha % senha.length()]);
+			char caractereResultadoDoXOR = (char) (Integer.parseInt(hexaDecimal, 16) ^ senha.toCharArray()[contadorSenha % senha.length()]);
 			
 			mensagem += caractereResultadoDoXOR;
 			
