@@ -4,4 +4,5 @@
     <fullyQualifiedTypeName name="java.lang.Error"/>
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="jdk.internal.org.jline.utils.InputStreamReader"/>
+    <fullyQualifiedTypeName name="com.sun.tools.javac.launcher.Main"/>
 </qualifiedTypeNameHistroy>
