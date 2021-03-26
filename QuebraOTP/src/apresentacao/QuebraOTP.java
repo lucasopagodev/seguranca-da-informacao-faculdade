@@ -1,6 +1,7 @@
 package apresentacao;
 
 public class QuebraOTP {
+	
 	private static String criptograma1 = "315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146fb778cdf2d3aff021dfff5b403b510d0d0455468aeb98622b137dae857553ccd8883a7bc37520e06e515d22c954eba5025b8cc57ee59418ce7dc6bc41556bdb36bbca3e8774301fbcaa3b83b220809560987815f65286764703de0f3d524400a19b159610b11ef3e";
 	private static String criptograma2 = "234c02ecbbfbafa3ed18510abd11fa724fcda2018a1a8342cf064bbde548b12b07df44ba7191d9606ef4081ffde5ad46a5069d9f7f543bedb9c861bf29c7e205132eda9382b0bc2c5c4b45f919cf3a9f1cb74151f6d551f4480c82b2cb24cc5b028aa76eb7b4ab24171ab3cdadb8356f";
 	private static String criptograma3 = "32510ba9a7b2bba9b8005d43a304b5714cc0bb0c8a34884dd91304b8ad40b62b07df44ba6e9d8a2368e51d04e0e7b207b70b9b8261112bacb6c866a232dfe257527dc29398f5f3251a0d47e503c66e935de81230b59b7afb5f41afa8d661cb";
@@ -13,15 +14,26 @@ public class QuebraOTP {
 	private static String criptograma10 = "466d06ece998b7a2fb1d464fed2ced7641ddaa3cc31c9941cf110abbf409ed39598005b3399ccfafb61d0315fca0a314be138a9f32503bedac8067f03adbf3575c3b8edc9ba7f537530541ab0f9f3cd04ff50d66f1d559ba520e89a2cb2a83";
 	private static String criptograma11 = "32510ba9babebbbefd001547a810e67149caee11d945cd7fc81a05e9f85aac650e9052ba6a8cd8257bf14d13e6f0a803b54fde9e77472dbff89d71b57bddef121336cb85ccb8f3315f4b52e301d16e9f52f904";
 	
-	private static String criptogramaA = criptograma5;
-	private static String criptogramaB = criptograma6;
-	private static String tentativaDeAdivinhar = "You don't want to buy a set of car k";
+	private static String criptogramaA = criptograma8;
+	private static String criptogramaB = criptograma3;
+	private static String tentativaDeAdivinhar = "We can see the point where the chip is unhappy if a wrong bit is sent and consumes more power ";
 	
+	// 1 * We can factor the number 15 with quantum computers. We can also factor the number 15 with a dog trained to bark
+	// 2 * Euler would probably enjoy that now his theorem becomes a corner stone of crypto - Annonymous on Euler's theore
+	// 3 * The nice thing about Keeyloq is now we cryptographers can drive a lot of fancy cars - Dan Bone 
+	// 4 * The ciphertext produced by a weak encryption algorithm looks as good as ciphertext produced by a strong encryption algorithm - Philip Zimmerman
+	// 5 * You don't want to buy a set of car keys from a guy who specializes in stealing cars - Marc Rotenberg commenting on Clippe
+	// 6 * There are two types of cryptography - that which will keep secrets safe from your little sister, and that which will keep
+	// 7 * There are two types of cyptography: one that allows the Government to use brute force to break the code, and one that req
+	// 8 * We can see the point where the chip is unhappy if a wrong bit is sent and consumes more power from the environment - Adi Shamir
+	// 9 * A (private-key)  encryption scheme states 3 algorithms, namely a procedure for generating keys, a procedure for encrypting, and a procedure for 
+	// 10 * The Concise OxfordDictionary (2006) defines crypto as the art of  writing o r solving codes.
+	// 11 * The secret message is: When using a stream cipher, never use the key more than onc
 	
 	public static void main(String[] args) {
 		// Declaração de variáveis
 		String criptogramaXOR = "";
-
+		
 		// Fazer o XOR dos dois criptogramas, ou seja, conseguir o XOR das duas mensagens originais
 		int tamanhoMaximo = 0;
 		
@@ -30,23 +42,27 @@ public class QuebraOTP {
 		} else {
 			tamanhoMaximo = criptogramaA.length() - 1;
 		}
+		
 		for (int i = 0 ; i < (tamanhoMaximo) ; i+=2) {
 			String caractere1 = criptogramaA.substring(i, i + 2);
 			String caractere2 = criptogramaB.substring(i, i + 2);
 			
-			criptogramaXOR += ((char) (Integer.parseInt(caractere1, 16) ^ Integer.parseInt(caractere2, 16)));
+			criptogramaXOR += ( (char) (Integer.parseInt(caractere1, 16) ^ Integer.parseInt(caractere2, 16)) );
 		}
 		
 		for (int i = 0 ; i < (criptogramaXOR.length() - tentativaDeAdivinhar.length()) ; i++) {
 			String textoAberto = "";
+			
 			for (int j = 0 ; j < tentativaDeAdivinhar.length() ; j++) {
 				textoAberto += ((char) (criptogramaXOR.substring(i + j, i + j + 1).toCharArray()[0] ^
 										tentativaDeAdivinhar.substring(j, j + 1).toCharArray()[0]));
 			}
+			
 			System.out.println(i + ": " + textoAberto);
 		}
 	}
 }
+
 // criptogramaXOR:			asdfghj
 // tentativaDeAdivinhar:	 the 
 // textoAberto:				bird
