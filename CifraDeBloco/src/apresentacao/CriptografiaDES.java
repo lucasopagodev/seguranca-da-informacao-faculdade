@@ -46,8 +46,8 @@ public class CriptografiaDES {
 	}
 	
 	private static String encriptar(String texto, String senha) throws Exception {
-		SecretKey objChaveSecreta = new SecretKeySpec(senha.getBytes(), "DES");
-		Cipher cifra = Cipher.getInstance("DES");
+		SecretKey objChaveSecreta = new SecretKeySpec(senha.getBytes(), "DESede");
+		Cipher cifra = Cipher.getInstance("DESede");
 		
 		cifra.init(Cipher.ENCRYPT_MODE, objChaveSecreta);
 		byte[] arrayDeBytes = cifra.doFinal(texto.getBytes());
@@ -56,8 +56,8 @@ public class CriptografiaDES {
 	}
 	
 	private static String decriptar(String criptograma, String senha) throws Exception {
-		SecretKey objChaveSecreta = new SecretKeySpec(senha.getBytes(), "DES");
-		Cipher cifra = Cipher.getInstance("DES");
+		SecretKey objChaveSecreta = new SecretKeySpec(senha.getBytes(), "DESede");
+		Cipher cifra = Cipher.getInstance("DESede");
 		
 		cifra.init(Cipher.DECRYPT_MODE, objChaveSecreta);
 		byte[] arrayDeBytes = cifra.doFinal(Base64.getDecoder().decode(criptograma));
