@@ -62,7 +62,7 @@ public class CriptografiaDES {
 		cifra.init(Cipher.DECRYPT_MODE, objChaveSecreta);
 		byte[] arrayDeBytes = cifra.doFinal(Base64.getDecoder().decode(criptograma));
 		
-		return Base64.getEncoder().encodeToString(arrayDeBytes);
+		return new String(arrayDeBytes);
 	}
 	
 	
