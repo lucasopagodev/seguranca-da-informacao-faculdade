@@ -2,6 +2,7 @@ package apresentacao;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -19,7 +20,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class RSA {
+public class CriptografiaRSA {
 	// Propriedades da classe
 	private static String chavePublica = "";
 	private static String chaveSecreta = "";
@@ -37,14 +38,16 @@ public class RSA {
 		// Laço de opções
 		do {
 			try {
-				System.out.println("+========================+");
-				System.out.println("|     Menu de Opções     |");
-				System.out.println("+========================+");
-				System.out.println("|1 - Gerar par de chaves |");
-				System.out.println("|2 - Encriptar um texto  |");
-				System.out.println("|3 - Decriptar uma cifra |");
-				System.out.println("|4 - Sair                |");
-				System.out.println("+========================+");
+				System.out.println("+=============================+");
+				System.out.println("|     Menu de Opções          |");
+				System.out.println("+=============================+");
+				System.out.println("|1 - Gerar par de chaves      |");
+				System.out.println("|2 - Encriptar um texto       |");
+				System.out.println("|3 - Decriptar uma cifra      |");
+				System.out.println("|4 - Assinar um texto         |");
+				System.out.println("|5 - Verificar uma assinatura |");
+				System.out.println("|6 - Sair                     |");
+				System.out.println("+=============================+");
 				opcao = Integer.parseInt(leitor.readLine());
 				
 				switch (opcao) {
@@ -83,11 +86,39 @@ public class RSA {
 						System.out.println("Texto: " + texto);
 						
 						break;
+					case 4:
+						System.out.print("Digite o texto: ");
+						texto = leitor.readLine();
+						
+						System.out.print("Digite a chave secreta: ");
+						chaveSecreta = leitor.readLine();
+						
+						encriptarRSA(texto, chaveSecreta);
+						
+						System.out.println("Chave compartilhada: " + chaveCompartilhada);
+						System.out.println("Criptograma: " + criptograma);
+						
+						break;
+					case 5:
+						System.out.print("Digite o criptograma: ");
+						criptograma = leitor.readLine();
+						
+						System.out.print("Digite a chave pública: ");
+						chavePublica = leitor.readLine();
+						
+						System.out.print("Digite a chave compartilhada: ");
+						chaveCompartilhada = leitor.readLine();
+						
+						decriptarRSA(criptograma, chavePublica, chaveCompartilhada);
+						
+						System.out.println("Texto: " + texto);
+						
+						break;
 				}
 			} catch (Exception erro) {
 				System.out.println(erro);
 			}
-		} while (opcao != 4);
+		} while (opcao != 6);
 	}
 	
 	private static void gerarParDeChaves() throws Exception {
@@ -98,7 +129,7 @@ public class RSA {
 		chaveSecreta = Base64.getEncoder().encodeToString(parDeChaves.getPrivate().getEncoded());
 	}
 	
-	private static void encriptarRSA(String texto, String chavePublica) throws Exception {
+	private static void encriptarRSA(String texto, String chave) throws Exception {
 		Cipher cifraRSA = Cipher.getInstance("RSA");
 		
 		// Geração da chave aleatória
@@ -106,7 +137,7 @@ public class RSA {
 		new SecureRandom().nextBytes(vetorDeBytes);
 		
 		// Inicialização do RSA
-		cifraRSA.init(Cipher.ENCRYPT_MODE, getChavePublica(chavePublica));
+		cifraRSA.init(Cipher.ENCRYPT_MODE, getChave(chave));
 		
 		// Encriptação da chave aleatória com o RSA, usando a chave pública
 		chaveCompartilhada = Base64.getEncoder().encodeToString(cifraRSA.doFinal(vetorDeBytes));
@@ -114,31 +145,35 @@ public class RSA {
 		criptograma = encriptarAES(texto, new SecretKeySpec(calcularHash(vetorDeBytes), "AES"));
 	}
 	
-	private static void decriptarRSA(String criptograma, String chaveSecreta, String chaveCompartilhada) throws Exception {
+	private static void decriptarRSA(String criptograma, String chave, String chaveCompartilhada) throws Exception {
 		Cipher cifraRSA = Cipher.getInstance("RSA");
 		
-		cifraRSA.init(Cipher.DECRYPT_MODE, getChaveSecreta(chaveSecreta));
+		cifraRSA.init(Cipher.DECRYPT_MODE, getChave(chave));
 		byte[] vetorDeBytes = cifraRSA.doFinal(Base64.getDecoder().decode(chaveCompartilhada));
 		
 		texto = decriptarAES(criptograma, new SecretKeySpec(calcularHash(vetorDeBytes), "AES"));
 	}
 	
-	private static PublicKey getChavePublica(String chavePublica) throws Exception {
-		PublicKey retorno = null;
+	private static Key getChave(String chave) throws Exception {
+		PublicKey retornoPublico = null;
+		PrivateKey retornoSecreto = null;
+		boolean chavePublica = true;
 		
-		EncodedKeySpec especificacaoDaChavePublica = new X509EncodedKeySpec(Base64.getDecoder().decode(chavePublica));
-		retorno = KeyFactory.getInstance("RSA").generatePublic(especificacaoDaChavePublica);
+		try {
+			EncodedKeySpec especificacaoDaChavePublica = new X509EncodedKeySpec(Base64.getDecoder().decode(chave));
+			retornoPublico = KeyFactory.getInstance("RSA").generatePublic(especificacaoDaChavePublica);
+			chavePublica = true;
+		} catch (Exception erro) {
+			EncodedKeySpec especificacaoDaChaveSecreta = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(chaveSecreta));
+			retornoSecreto = KeyFactory.getInstance("RSA").generatePrivate(especificacaoDaChaveSecreta);
+			chavePublica = false;
+		}
 		
-		return retorno;
-	}
-	
-	private static PrivateKey getChaveSecreta(String chaveSecreta) throws Exception {
-		PrivateKey retorno = null;
-		
-		EncodedKeySpec especificacaoDaChaveSecreta = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(chaveSecreta));
-		retorno = KeyFactory.getInstance("RSA").generatePrivate(especificacaoDaChaveSecreta);
-		
-		return retorno;
+		if (chavePublica) {
+			return retornoPublico;
+		} else {
+			return retornoSecreto;
+		}
 	}
 	
 	private static String encriptarAES(String texto, SecretKey chaveCompartilhadaAES) throws Exception {
@@ -166,3 +201,14 @@ public class RSA {
 		return objHash.digest();
 	}
 }
+
+// Protocolo de segurança para sigilo e autenticação
+// 1 sigilo: encriptar com a chave pública
+// 2 autenticação: encriptar com a chave secreta
+// 3 verificar assinatura: decriptar com a chave pública
+// 4 ler o texto: decriptar com a chave secreta
+//
+// Pares 2-3
+// Pares 1-4
+//
+// O mais importante de tudo é a ordem !
