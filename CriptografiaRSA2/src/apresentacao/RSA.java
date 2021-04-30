@@ -20,7 +20,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class CriptografiaRSA {
+public class RSA {
 	// Propriedades da classe
 	private static String chavePublica = "";
 	private static String chaveSecreta = "";
